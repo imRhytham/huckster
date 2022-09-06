@@ -9,13 +9,21 @@ const Users = () => {
 	const navigate = useNavigate();
 	const userList = useSelector((state) => state.users.users);
 	const [users, setUsers] = useState([]);
+	const [searchTerm, setSearchTerm] = useState('');
 
-	console.log(users);
 	useEffect(() => {
 		dispatch(getOrderList());
 		dispatch(getProductList());
 		dispatch(getUserList());
 	}, [dispatch]);
+
+	const handleSearchChange = (e) => {
+		setSearchTerm(e.target.value);
+		const filteredUsers = userList.filter((user) => {
+			return user.name.toLowerCase().includes(searchTerm.toLowerCase());
+		});
+		setUsers(filteredUsers);
+	};
 
 	useEffect(() => {
 		setUsers(userList);
@@ -23,7 +31,7 @@ const Users = () => {
 
 	return (
 		<div className='w-full text-white flex flex-col justify-center items-center p-5'>
-			<SearchBar />
+			<SearchBar value={searchTerm} onChange={(e) => handleSearchChange(e)} />
 			<p className='text-3xl py-3'>Users</p>
 			<div className='overflow-x-auto relative shadow-md sm:rounded-lg'>
 				<table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>

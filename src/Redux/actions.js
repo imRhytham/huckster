@@ -27,7 +27,6 @@ export const getUserList = () => async (dispatch) => {
 		dispatch(setUserLoader(true));
 		const response = await axios.get('https://assessment.api.vweb.app/users');
 		const data = response.data;
-		console.log(data);
 		dispatch({
 			type: Actions.SET_ALL_USER_LIST,
 			payload: data,

@@ -27,11 +27,11 @@ const Orders = () => {
 				<table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
 					<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
 						<tr className=''>
-							<th className='py-3 px-6'>order_id</th>
-							<th className='py-3 px-6'>product_id</th>
-							<th className='py-3 px-6'>user_id</th>
-							<th className='py-3 px-6'>quantity</th>
-							<th className='py-3 px-6'>date</th>
+							<th className='py-3 px-10'>order_id</th>
+							<th className='py-3 px-10'>product_id</th>
+							<th className='py-3 px-10'>user_id</th>
+							<th className='py-3 px-10'>quantity</th>
+							<th className='py-3 px-10'>date</th>
 						</tr>
 					</thead>
 
@@ -42,11 +42,11 @@ const Orders = () => {
 									className='cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700'
 									onClick={() => navigate(`/orders/${order.order_id}`)}
 								>
-									<td className='py-4 px-6'>{order.order_id}</td>
-									<td className='py-4 px-6'>{order.product_id}</td>
-									<td className='py-4 px-6'>{order.user_id}</td>
-									<td className='py-4 px-6'>{order.quantity}</td>
-									<td className='py-4 px-6'>{order.order_date}</td>
+									<td className='py-4 px-10'>{order.order_id}</td>
+									<td className='py-4 px-10'>{order.product_id}</td>
+									<td className='py-4 px-10'>{order.user_id}</td>
+									<td className='py-4 px-10'>{order.quantity}</td>
+									<td className='py-4 px-10'>{order.order_date}</td>
 								</tr>
 							</tbody>
 						);

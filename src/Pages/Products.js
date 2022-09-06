@@ -9,6 +9,7 @@ const Products = () => {
 	const dispatch = useDispatch();
 	const productList = useSelector((state) => state.products.products);
 	const [products, setProducts] = useState([]);
+	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {
 		dispatch(getOrderList());
@@ -20,9 +21,21 @@ const Products = () => {
 		setProducts(productList);
 	}, [productList]);
 
+	const handleSearchChange = (e) => {
+		setSearchTerm(e.target.value);
+		const filteredProducts = productList.filter((product) => {
+			return product.name.toLowerCase().includes(searchTerm.toLowerCase());
+		});
+		setProducts(filteredProducts);
+	};
+
+	useEffect(() => {
+		setProducts(productList);
+	}, [productList]);
+
 	return (
 		<div className='w-full text-white flex flex-col justify-center items-center p-5'>
-			<SearchBar />
+			<SearchBar value={searchTerm} onChange={(e) => handleSearchChange(e)} />
 			<p className='text-3xl py-3'>Products</p>
 			<div className='overflow-x-auto relative shadow-md sm:rounded-lg'>
 				<table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
