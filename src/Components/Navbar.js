@@ -10,13 +10,12 @@ const Navbar = () => {
 					className='h-10 w-10 rounded-full cursor-pointer'
 					src={require('../Assets/icon.png')}
 					alt='logo'
-					onClick={() => navigate('/')}
 				/>
 			</div>
 			<div
 				className='cursor-pointer text-xl  hover:text-[#36B9F2] active:text-[#36B9Ff] transition duration-150 ease-in-out'
 				onClick={() => {
-					navigate('/orders');
+					navigate('/');
 				}}
 			>
 				Orders

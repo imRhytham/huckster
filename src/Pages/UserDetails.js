@@ -1,43 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { ReactComponent as Spinner } from './../Assets/svgs/spinner.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import SearchBar from '../Components/SearchBar';
-import { getOrderList, getProductList, getUserList } from '../Redux/actions';
-import { getProductByID, getUserByID } from '../utils/util';
 
-const Orders = () => {
+import { useParams } from 'react-router-dom';
+import { getOrderList } from '../Redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductByID, getUserByID, getOrdersByUserID } from '../utils/util';
+
+const UserDetails = () => {
+	const params = useParams();
 	const dispatch = useDispatch();
-	const orderList = useSelector((state) => state.orders.orders);
-	const loading = useSelector((state) => state.orders.loading);
 	const productList = useSelector((state) => state.products.products);
+	const orderList = useSelector((state) => state.orders.orders);
 	const userList = useSelector((state) => state.users.users);
+	const loading = useSelector((state) => state.orders.loading);
 	const [orders, setOrders] = useState([]);
-	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {
 		dispatch(getOrderList());
-		dispatch(getProductList());
-		dispatch(getUserList());
 	}, [dispatch]);
 
-	const handleSearchChange = (e) => {
-		setSearchTerm(e.target.value);
-		const filteredOrders = orderList.filter((order) => {
-			return (
-				getProductByID({ id: order.product_id, products: productList })
-					?.name.toLowerCase()
-					.includes(searchTerm.toLowerCase()) ||
-				getUserByID({ id: order.user_id, users: userList })
-					?.name.toLowerCase()
-					.includes(searchTerm.toLowerCase())
-			);
+	useEffect(() => {
+		const filteredOrders = getOrdersByUserID({
+			id: params.user_id,
+			orders: orderList,
 		});
 		setOrders(filteredOrders);
-	};
-
-	useEffect(() => {
-		setOrders(orderList);
-	}, [orderList]);
+	}, [orderList, params.user_id]);
 
 	return (
 		<div className='w-full text-white flex flex-col justify-center items-center p-5'>
@@ -45,11 +33,15 @@ const Orders = () => {
 				<Spinner />
 			) : (
 				<>
-					<SearchBar
-						value={searchTerm}
-						onChange={(e) => handleSearchChange(e)}
-					/>
-					<p className='text-3xl py-3'>Orders</p>
+					<p className='text-3xl py-3'>
+						Orders of{' '}
+						{
+							getUserByID({
+								id: parseInt(params.user_id),
+								users: userList,
+							})?.name
+						}
+					</p>
 					<div className='overflow-x-auto relative shadow-md sm:rounded-lg'>
 						<table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
 							<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
@@ -89,7 +81,7 @@ const Orders = () => {
 													getProductByID({
 														id: order.product_id,
 														products: productList,
-													}).selling_price}
+													})?.selling_price}
 											</td>
 											<td className='py-4 px-10'>
 												{new Date(
@@ -108,4 +100,4 @@ const Orders = () => {
 	);
 };
 
-export default Orders;
+export default UserDetails;
