@@ -1,0 +1,11 @@
+//user
+export const SET_USER_LOADER = 'SET_USER_LOADER';
+export const SET_ALL_USER_LIST = 'SET_ALL_USER_LIST';
+
+//order
+export const SET_ORDER_LOADER = 'SET_ORDER_LOADER';
+export const SET_ALL_ORDER_LIST = 'SET_ALL_ORDER_LIST';
+
+//product
+export const SET_PRODUCT_LOADER = 'SET_PRODUCT_LOADER';
+export const SET_ALL_PRODUCT_LIST = 'SET_ALL_PRODUCT_LIST';
