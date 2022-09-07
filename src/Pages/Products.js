@@ -4,6 +4,7 @@ import SearchBar from '../Components/SearchBar';
 import { useNavigate } from 'react-router-dom';
 import { getOrderList, getProductList, getUserList } from '../Redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Pagination from '../Components/Pagination';
 
 const Products = () => {
 	const navigate = useNavigate();
@@ -12,6 +13,8 @@ const Products = () => {
 	const loading = useSelector((state) => state.products.loading);
 	const [products, setProducts] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
+	const [currentPage, setCurrentPage] = useState(1);
+	const [productsPerPage] = useState(10);
 
 	useEffect(() => {
 		dispatch(getOrderList());
@@ -30,6 +33,14 @@ const Products = () => {
 	useEffect(() => {
 		setProducts(productList);
 	}, [productList]);
+
+	const indexOfFirstProduct = currentPage * productsPerPage;
+	const indexOfLastProduct = indexOfFirstProduct - productsPerPage;
+	const currentProducts = products.slice(
+		indexOfLastProduct,
+		indexOfFirstProduct
+	);
+	const pages = Math.ceil(products.length / productsPerPage);
 
 	return (
 		<div className='w-full text-white flex flex-col justify-center items-center p-5'>
@@ -53,7 +64,7 @@ const Products = () => {
 								</tr>
 							</thead>
 
-							{products.map((product) => {
+							{currentProducts.map((product) => {
 								return (
 									<tbody>
 										<tr
@@ -74,6 +85,11 @@ const Products = () => {
 							})}
 						</table>
 					</div>
+					<Pagination
+						pages={pages}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+					/>
 				</>
 			)}
 		</div>

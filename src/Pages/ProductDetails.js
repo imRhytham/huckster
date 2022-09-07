@@ -9,6 +9,7 @@ import {
 	getProductByID,
 	getUserByID,
 } from '../utils/util';
+import Pagination from '../Components/Pagination';
 
 const ProductDetails = () => {
 	const params = useParams();
@@ -18,6 +19,8 @@ const ProductDetails = () => {
 	const userList = useSelector((state) => state.users.users);
 	const loading = useSelector((state) => state.orders.loading);
 	const [orders, setOrders] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [recordsPerPage] = useState(10);
 
 	useEffect(() => {
 		dispatch(getOrderList());
@@ -30,6 +33,11 @@ const ProductDetails = () => {
 		});
 		setOrders(filteredOrders);
 	}, [orderList, params.product_id]);
+
+	const indexofLastOrder = currentPage * recordsPerPage;
+	const indexOfFirstOrder = indexofLastOrder - recordsPerPage;
+	const currentOrders = orders.slice(indexOfFirstOrder, indexofLastOrder);
+	const pages = Math.ceil(orders.length / recordsPerPage);
 
 	return (
 		<div className='w-full text-white flex flex-col justify-center items-center p-5'>
@@ -59,7 +67,7 @@ const ProductDetails = () => {
 								</tr>
 							</thead>
 
-							{orders.map((order) => {
+							{currentOrders.map((order) => {
 								return (
 									<tbody key={order?.order_id}>
 										<tr className=' bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
@@ -98,6 +106,11 @@ const ProductDetails = () => {
 							})}
 						</table>
 					</div>
+					<Pagination
+						pages={pages}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+					/>
 				</>
 			)}
 		</div>

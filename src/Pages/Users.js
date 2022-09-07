@@ -4,6 +4,7 @@ import SearchBar from '../Components/SearchBar';
 import { useNavigate } from 'react-router-dom';
 import { getOrderList, getProductList, getUserList } from '../Redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Pagination from '../Components/Pagination';
 
 const Users = () => {
 	const dispatch = useDispatch();
@@ -12,6 +13,8 @@ const Users = () => {
 	const loading = useSelector((state) => state.users.loading);
 	const [users, setUsers] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
+	const [currentPage, setCurrentPage] = useState(1);
+	const [recordsPerPage] = useState(10);
 
 	useEffect(() => {
 		dispatch(getOrderList());
@@ -30,6 +33,11 @@ const Users = () => {
 	useEffect(() => {
 		setUsers(userList);
 	}, [userList]);
+
+	const indexOfFirstProduct = currentPage * recordsPerPage;
+	const indexOfLastProduct = indexOfFirstProduct - recordsPerPage;
+	const currentUsers = users.slice(indexOfLastProduct, indexOfFirstProduct);
+	const pages = Math.ceil(users.length / recordsPerPage);
 
 	return (
 		<div className='w-full text-white flex flex-col justify-center items-center p-5'>
@@ -50,7 +58,7 @@ const Users = () => {
 									<th className='py-3 px-10'>Name</th>
 								</tr>
 							</thead>
-							{users.map((user) => {
+							{currentUsers.map((user) => {
 								return (
 									<tbody key={user.user_id}>
 										<tr
@@ -67,6 +75,11 @@ const Users = () => {
 							})}
 						</table>
 					</div>
+					<Pagination
+						pages={pages}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+					/>
 				</>
 			)}
 		</div>
